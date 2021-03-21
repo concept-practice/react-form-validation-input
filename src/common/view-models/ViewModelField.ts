@@ -1,5 +1,6 @@
 import { InputType } from '../components/forms/inputs/InputType';
 import IValidator from '../validation/IValidator';
+import SelectListItem from './SelectListItem';
 
 export default class ViewModelField {
 	public type: InputType;
@@ -17,12 +18,14 @@ export default class ViewModelField {
 	private min: number = new Date(1970, 1, 1).getTime();
 	private max: number = new Date(2999, 1, 1).getTime();
 
+	public items: Array<SelectListItem>;
 	public validators: Array<IValidator>;
 
-	public constructor(type: InputType) {
+	public constructor(type: InputType, items: Array<SelectListItem> = []) {
 		this.type = type;
 		this.validators = new Array<IValidator>();
 		this.isDateMinMax = true;
+		this.items = items;
 	}
 
 	public SetMinDate(value: Date): void {

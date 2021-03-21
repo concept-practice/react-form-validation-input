@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
-import IViewModel from '../../../view-models/IViewModel';
+import BaseViewModel from '../../../view-models/BaseViewModel';
 import Form from './Form';
 import TextInput from '../inputs/TextInput';
 
 describe('Form', () => {
 	test('Submit disabled on validation error', () => {
-		class Failure implements IViewModel {
-			public Validate = (): boolean => false;
+		class Failure implements BaseViewModel {
+			public ViewModelValid = (): boolean => false;
 		}
 
 		render(
@@ -23,8 +23,8 @@ describe('Form', () => {
 	});
 
 	test('Submit not disabled on validation success', () => {
-		class Success implements IViewModel {
-			public Validate = (): boolean => true;
+		class Success implements BaseViewModel {
+			public ViewModelValid = (): boolean => true;
 		}
 
 		render(

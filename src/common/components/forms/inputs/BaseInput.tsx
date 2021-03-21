@@ -6,7 +6,7 @@ import Label from '../../label/Label';
 import FormControl from '../layout/FormControl';
 import FormField from '../layout/FormField';
 
-const BaseInput: React.FC<BaseInputProps> = ({ field, inputType, isSelect, items }) => {
+const BaseInput: React.FC<BaseInputProps> = ({ field, inputType, isSelect, items, setViewModelValid }) => {
 	const inputId = `inputId${field.displayName}`;
 
 	const [value, setValue] = React.useState<string>(field.value);
@@ -17,11 +17,20 @@ const BaseInput: React.FC<BaseInputProps> = ({ field, inputType, isSelect, items
 		field.value = event.target.value;
 		setValue(event.target.value);
 		setIsValid(event.target.validity.valid);
+		setViewModelValid(field.IsValid());
+	};
+
+	const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+		field.value = event.target.value;
+		setValue(event.target.value);
+		setIsValid(event.target.validity.valid);
+		setViewModelValid(field.IsValid());
 	};
 
 	useEffect(() => {
 		setErrorMessages(field.ErrorMessages());
-	}, [valid, value, field]);
+		setViewModelValid(valid);
+	}, [valid, value, field, setViewModelValid]);
 
 	return (
 		<FormField>
@@ -29,7 +38,7 @@ const BaseInput: React.FC<BaseInputProps> = ({ field, inputType, isSelect, items
 			<FormControl>
 				{isSelect ? (
 					<div className="select">
-						<select id={inputId} required={field.isRequired} value={value}>
+						<select id={inputId} required={field.isRequired} value={value} onChange={onSelectChange}>
 							{items.map((item) => (
 								<option value={item.Value}>{item.Text}</option>
 							))}
@@ -60,6 +69,7 @@ interface BaseInputProps {
 	inputType: string;
 	isSelect: boolean;
 	items: Array<SelectListItem>;
+	setViewModelValid: (valid: boolean) => void;
 }
 
 export default BaseInput;

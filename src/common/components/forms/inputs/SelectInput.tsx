@@ -1,15 +1,14 @@
 import React from 'react';
-import SelectListItem from '../../../view-models/SelectListItem';
 import ViewModelField from '../../../view-models/ViewModelField';
 import BaseInput from './BaseInput';
 
-const SelectInput: React.FC<SelectInputProps> = ({ field, items }) => {
-	return <BaseInput inputType={''} field={field} isSelect={true} items={items}></BaseInput>;
+const SelectInput: React.FC<SelectInputProps> = ({ field, setViewModelValid }) => {
+	return <BaseInput inputType={''} field={field} isSelect={true} items={field.items} setViewModelValid={setViewModelValid}></BaseInput>;
 };
 
 interface SelectInputProps {
 	field: ViewModelField;
-	items: Array<SelectListItem>;
+	setViewModelValid: (valid: boolean) => void;
 }
 
 export default SelectInput;

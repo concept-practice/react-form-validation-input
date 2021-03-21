@@ -1,18 +1,17 @@
 import InputFields from '../../../common/view-models/InputFields';
-import IViewModel from '../../../common/view-models/IViewModel';
+import BaseViewModel from '../../../common/view-models/BaseViewModel';
 import SelectListItem from '../../../common/view-models/SelectListItem';
 import ViewModelField from '../../../common/view-models/ViewModelField';
 
-export default class AddAirplaneViewModel implements IViewModel {
+export default class AddAirplaneViewModel extends BaseViewModel {
 	public Manufacturer: ViewModelField;
 	public Date: ViewModelField;
 	public Passengers: ViewModelField;
 	public Departure: ViewModelField;
-
-	public Airports: Array<SelectListItem>;
+	public Arrival: ViewModelField;
 
 	public constructor(airports: Array<SelectListItem>) {
-		this.Airports = airports;
+		super();
 
 		this.Manufacturer = InputFields.TextField()
 			.WithDisplayName('Manufacturer')
@@ -38,10 +37,10 @@ export default class AddAirplaneViewModel implements IViewModel {
 			.WithMaxNumber(10)
 			.Field();
 
-		this.Departure = InputFields.SelectField().WithDisplayName('Departure Airport').IsRequired().Field();
-	}
+		this.Departure = InputFields.SelectField(airports).WithDisplayName('Departure Airport').IsRequired().Field();
 
-	public Validate(): boolean {
-		return [this.Manufacturer, this.Departure, this.Departure, this.Passengers].every((x) => x.IsValid());
+		this.Arrival = InputFields.SelectField(airports).WithDisplayName('Arrival').IsRequired().NotEqualTo(this.Departure.value).Field();
+
+		this.AddFields([this.Manufacturer, this.Date, this.Passengers, this.Departure, this.Arrival]);
 	}
 }

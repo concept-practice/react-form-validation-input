@@ -5,14 +5,16 @@ import MaxNumberValidator from '../validation/MaxNumberValidator';
 import MinDateValidator from '../validation/MinDateValidator';
 import MinLengthValidator from '../validation/MinLengthValidator';
 import MinNumberValidator from '../validation/MinNumberValidator';
+import NotEqualToValidator from '../validation/NotEqualToValidator';
 import RequiredValidator from '../validation/RequiredValidator';
+import SelectListItem from './SelectListItem';
 import ViewModelField from './ViewModelField';
 
 export default class ViewModelFieldBuilder {
 	private field: ViewModelField;
 
-	public constructor(type: InputType) {
-		this.field = new ViewModelField(type);
+	public constructor(type: InputType, items: Array<SelectListItem> = []) {
+		this.field = new ViewModelField(type, items);
 	}
 
 	public WithDefaultValue(value: string): ViewModelFieldBuilder {
@@ -82,6 +84,12 @@ export default class ViewModelFieldBuilder {
 	public WithMaxNumber(value: number): ViewModelFieldBuilder {
 		this.field.SetNumberMax(value);
 		this.field.validators.push(new MaxNumberValidator(value));
+
+		return this;
+	}
+
+	public NotEqualTo(value: string): ViewModelFieldBuilder {
+		this.field.validators.push(new NotEqualToValidator(value));
 
 		return this;
 	}

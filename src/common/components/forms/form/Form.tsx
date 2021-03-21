@@ -1,34 +1,36 @@
-import React from 'react';
-import { ReactNode } from 'react';
-import IViewModel from '../../../view-models/IViewModel';
+import React, { useEffect } from 'react';
+import ValidationMessage from '../../../validation/ValidationMessage';
+import BaseViewModel from '../../../view-models/BaseViewModel';
+import DetermineFormField from './DetermineFormField';
 
-const Form: React.FC<FormProps> = ({ children, viewModel, onSuccess }) => {
+const Form: React.FC<FormProps> = ({ viewModel, onSuccess }) => {
 	const [viewModelValid, setViewModelValid] = React.useState<boolean>(true);
+	const [errorMessages, setErrorMessages] = React.useState<Array<string>>([]);
+
+	useEffect(() => {
+		setViewModelValid(viewModel.ViewModelValid());
+		setErrorMessages(viewModel.Fields.flatMap((field) => field.ErrorMessages()));
+	}, [viewModelValid, viewModel]);
 
 	const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-		if (viewModel.Validate()) {
-			onSuccess(viewModel);
-		} else {
-			setViewModelValid(false);
-		}
-
+		onSuccess(viewModel);
 		event.preventDefault();
 	};
 
 	return (
 		<form onSubmit={onSubmit}>
-			{children}
-			<button type="submit" className="button is-info is-small">
+			{viewModel.Fields.map((field) => DetermineFormField(field, setViewModelValid))}
+			<button type="submit" className="button is-info is-small" disabled={!viewModelValid}>
 				Submit
 			</button>
+			<ValidationMessage isValid={viewModelValid} errorMessages={errorMessages}></ValidationMessage>
 		</form>
 	);
 };
 
 interface FormProps {
-	children: ReactNode;
-	viewModel: IViewModel;
-	onSuccess(viewModel: IViewModel): void;
+	viewModel: BaseViewModel;
+	onSuccess(viewModel: BaseViewModel): void;
 }
 
 export default Form;

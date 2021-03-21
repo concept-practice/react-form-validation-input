@@ -1,4 +1,5 @@
 import { InputType } from '../components/forms/inputs/InputType';
+import SelectListItem from './SelectListItem';
 import ViewModelFieldBuilder from './ViewModelFieldBuilder';
 
 export default class InputFields {
@@ -14,7 +15,7 @@ export default class InputFields {
 		return new ViewModelFieldBuilder(InputType.Number);
 	}
 
-	public static SelectField(): ViewModelFieldBuilder {
-		return new ViewModelFieldBuilder(InputType.Select);
+	public static SelectField(items: Array<SelectListItem>): ViewModelFieldBuilder {
+		return new ViewModelFieldBuilder(InputType.Select, items).WithDefaultValue(items[0].Value);
 	}
 }
