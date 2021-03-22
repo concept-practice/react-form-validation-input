@@ -8,6 +8,9 @@ const Select: React.FC<SelectProps> = ({ value, setValue, options, valid, errors
 			<div className="control">
 				<div className={`select ${valid ? '' : 'is-danger'}`}>
 					<select value={value} onChange={(e): void => setValue(e.target.value)}>
+						<option selected disabled value={0}>
+							Select An Option
+						</option>
 						{options.map((item) => (
 							<option value={item.Value}>{item.Text}</option>
 						))}

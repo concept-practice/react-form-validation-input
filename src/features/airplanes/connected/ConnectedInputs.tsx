@@ -3,8 +3,8 @@ import SelectListItem from '../../../common/view-models/SelectListItem';
 import Select from './Select';
 
 const ConnectedInputs: React.FC<ConnectedInputsProps> = ({ airports }) => {
-	const [firstValue, setFirstValue] = React.useState<string>(airports[0].Value);
-	const [secondValue, setSecondValue] = React.useState<string>(airports[1].Value);
+	const [firstValue, setFirstValue] = React.useState<string>('0');
+	const [secondValue, setSecondValue] = React.useState<string>('0');
 	const [errors, setErrors] = React.useState<Array<string>>([]);
 
 	const [valid, setValid] = React.useState<boolean>(false);
